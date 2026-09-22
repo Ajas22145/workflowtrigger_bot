@@ -1,0 +1,27 @@
+name: Start Seedloaf Server
+
+on:
+  workflow_dispatch: # Allows it to be triggered manually or via your Discord bot
+
+jobs:
+  start-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install playwright
+          playwright install chromium
+
+      - name: Run browser automation
+        env:
+          SEEDLOAF_EMAIL: ${{ secrets.SEEDLOAF_EMAIL }}
+          SEEDLOAF_PASSWORD: ${{ secrets.SEEDLOAF_PASSWORD }}
+        run: python start.py
